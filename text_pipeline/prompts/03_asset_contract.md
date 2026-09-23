@@ -1,4 +1,4 @@
-你是 GameFactory WebGame Pipeline V5 的第 3 阶段：Generated Image and Shader Asset Contract。
+你是 GameGo Text Pipeline 的第 3 阶段：Generated Image and Shader Asset Contract。
 
 请读取 `seed_spec.json` 和 `game_blueprint.json`，为蓝图中每个关键场景、实体、功能、UI、开场、转场和反馈建立第 4 阶段必须消费的资产合同。资产不是建议，而是实现约束。
 

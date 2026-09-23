@@ -4,8 +4,8 @@ GameGo constructs game-development tasks through structured planning. This repos
 
 | Directory | Input | Image handling |
 |---|---|---|
-| `harness_steam_v4` | Game descriptions, metadata, and optional screenshots | Up to five screenshots are supplied to Stage 1 |
-| `harness_webgame_v5` | Game titles, descriptions, instructions, categories, and tags | Text only; source URLs are not fetched |
+| `image_pipeline` | Game descriptions, metadata, and optional screenshots | Up to five screenshots are supplied to Stage 1 |
+| `text_pipeline` | Game titles, descriptions, instructions, categories, and tags | Text only; source URLs are not fetched |
 
 Both pipelines produce a seed specification, a game blueprint, and an asset contract. They select a canonical specification and apply Protected Domain Compact to export execution queries.
 
@@ -20,7 +20,7 @@ Game seed
 
 ## Scope
 
-This package includes planning prompts, rendering and gameplay routing, skill cards, asset validation, and query export. It does not include the training dataset, teacher credentials or identity, production execution infrastructure, model checkpoints, or training trajectories. The later adaptive query conversion policy is not included in these two harness snapshots. This repository is not a complete reproduction package for all paper experiments.
+This package includes planning prompts, rendering and gameplay routing, skill cards, asset validation, and query export. It does not include the training dataset, teacher credentials or identity, production execution infrastructure, model checkpoints, or training trajectories. The later adaptive query conversion policy is not included in these two pipeline snapshots. This repository is not a complete reproduction package for all paper experiments.
 
 The batch JSONL interfaces below construct queries without executing games. Legacy execution hooks require a user-supplied runner and are not needed for query construction.
 
@@ -34,7 +34,7 @@ source .venv/bin/activate
 python -m pip install -r requirements.txt
 ```
 
-The Steam pipeline uses `tiktoken` when available. Its first use may download the public `cl100k_base` encoding. An approximate byte-based budget is used if `tiktoken` is not installed. WebGame uses `json-repair` to recover malformed JSON.
+The image pipeline uses `tiktoken` when available. Its first use may download the public `cl100k_base` encoding. An approximate byte-based budget is used if `tiktoken` is not installed. The text pipeline uses `json-repair` to recover malformed JSON.
 
 ## Model configuration
 
@@ -55,12 +55,12 @@ Do not commit credentials. The vision and compaction models default to the plann
 From the repository root:
 
 ```bash
-python harness_steam_v4/lifecycle_harness_steam.py \
-  --config harness_steam_v4/stages.json \
-  --steam-jsonl examples/steam_seed.jsonl \
+python image_pipeline/pipeline.py \
+  --config image_pipeline/stages.json \
+  --seed-jsonl examples/image_seed.jsonl \
   --batch-limit 1 \
   --pipeline-workers 1 \
-  --run-dir outputs/steam
+  --run-dir outputs/image
 ```
 
 The example is a newly written synthetic seed and contains no training or benchmark record. Add your own PNG or JPEG screenshot paths to `media.local_paths` to exercise image input. Paths are resolved from the working directory. The normalized example uses `input_contract: raw_game_v1` and `origin: steam`.
@@ -68,15 +68,15 @@ The example is a newly written synthetic seed and contains no training or benchm
 ## Text-only pipeline
 
 ```bash
-python harness_webgame_v5/lifecycle_harness_webgame.py \
-  --config harness_webgame_v5/stages.json \
-  --webgame-jsonl examples/webgame_seed.jsonl \
+python text_pipeline/pipeline.py \
+  --config text_pipeline/stages.json \
+  --seed-jsonl examples/text_seed.jsonl \
   --batch-limit 1 \
   --pipeline-workers 1 \
-  --run-dir outputs/webgame
+  --run-dir outputs/text
 ```
 
-WebGame resumes completed records by default. Add `--no-resume` to recompute them. Steam supports `--resume`. Both interfaces support `--from-stage`, `--to-stage`, and `--item-retries`. WebGame additionally supports `--no-skill-cards`.
+The text pipeline resumes completed records by default. Add `--no-resume` to recompute them. The image pipeline supports `--resume`. Both interfaces support `--from-stage`, `--to-stage`, and `--item-retries`. The text pipeline additionally supports `--no-skill-cards`.
 
 These commands call your configured model API and may incur provider charges.
 
@@ -95,11 +95,11 @@ Generated outputs can contain input metadata and local paths. They are ignored b
 ## Offline checks
 
 ```bash
-python -m unittest discover -s harness_steam_v4 -p 'test_*.py'
-python -m unittest discover -s harness_webgame_v5 -p 'test_*.py'
+python -m unittest discover -s image_pipeline -p 'test_*.py'
+python -m unittest discover -s text_pipeline -p 'test_*.py'
 ```
 
-These tests do not call model APIs. Two historical comparisons against a separate, unreleased harness version are explicitly skipped. See `docs/release_notes.md` for portability changes and the limits of validation.
+These tests do not call model APIs. Two historical comparisons against a separate, unreleased pipeline version are explicitly skipped. See `docs/release_notes.md` for portability changes and the limits of validation.
 
 ## Benchmark and demonstrations
 

@@ -3,16 +3,16 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import lifecycle_harness_webgame as harness
+import pipeline as pipeline
 
 
 class WebGameAdapterTests(unittest.TestCase):
     def test_color_prompts_preserve_evidence_based_palette_diversity(self):
-        harness_dir = Path(__file__).parent
-        seed_prompt = (harness_dir / "prompts" / "01_seed_spec.md").read_text()
-        blueprint_prompt = (harness_dir / "prompts" / "02_game_blueprint.md").read_text()
-        asset_prompt = (harness_dir / "prompts" / "03_asset_contract.md").read_text()
-        implementation_prompt = (harness_dir / "prompts" / "04_implementation.md").read_text()
+        pipeline_dir = Path(__file__).parent
+        seed_prompt = (pipeline_dir / "prompts" / "01_seed_spec.md").read_text()
+        blueprint_prompt = (pipeline_dir / "prompts" / "02_game_blueprint.md").read_text()
+        asset_prompt = (pipeline_dir / "prompts" / "03_asset_contract.md").read_text()
+        implementation_prompt = (pipeline_dir / "prompts" / "04_implementation.md").read_text()
         self.assertIn("visual_evidence_level", seed_prompt)
         self.assertIn("source facts and gameplay semantics → `semantic_visual_anchors`", seed_prompt)
         self.assertIn("generic style label may not be chosen first", seed_prompt)
@@ -21,7 +21,7 @@ class WebGameAdapterTests(unittest.TestCase):
         self.assertIn("Implement `semantic_visual_anchors`", implementation_prompt)
 
     def test_canonical_selector_uses_legacy_visual_anchor_backfill(self):
-        seed = harness.SeedInput("query", "item", "", [], {})
+        seed = pipeline.SeedInput("query", "item", "", [], {})
         previous = [
             {"stage_id": "01_seed_spec", "content": "{}"},
             {"stage_id": "02_game_blueprint", "content": json.dumps({
@@ -30,37 +30,37 @@ class WebGameAdapterTests(unittest.TestCase):
             })},
             {"stage_id": "03_asset_contract", "content": "{}"},
         ]
-        product = harness.select_canonical_spec(seed, previous)["product_identity"]
+        product = pipeline.select_canonical_spec(seed, previous)["product_identity"]
         self.assertEqual(product["visual_evidence_level"], "sparse")
         self.assertTrue(product["semantic_visual_anchors"][0]["legacy_backfill"])
 
     def test_spatial_dimension_preference_is_stable_and_stage1_only(self):
         selected = [
-            harness.spatial_dimension_preference_selected(f"item-{index}", 0.40)
+            pipeline.spatial_dimension_preference_selected(f"item-{index}", 0.40)
             for index in range(10000)
         ]
         self.assertTrue(3900 <= sum(selected) <= 4100)
-        self.assertFalse(harness.spatial_dimension_preference_selected("same-id", 0.0))
-        self.assertTrue(harness.spatial_dimension_preference_selected("same-id", 1.0))
+        self.assertFalse(pipeline.spatial_dimension_preference_selected("same-id", 0.0))
+        self.assertTrue(pipeline.spatial_dimension_preference_selected("same-id", 1.0))
         self.assertEqual(
-            harness.spatial_dimension_preference_selected("same-id", 0.40),
-            harness.spatial_dimension_preference_selected("same-id", 0.40),
+            pipeline.spatial_dimension_preference_selected("same-id", 0.40),
+            pipeline.spatial_dimension_preference_selected("same-id", 0.40),
         )
         with tempfile.TemporaryDirectory() as temp:
             prompt = Path(temp) / "prompt.md"
             prompt.write_text("system prompt")
-            seed = harness.SeedInput("query", "same-id", "make a game", [], {})
-            stage1 = harness.Stage("01_seed_spec", "Seed", prompt, "seed_spec.json")
-            later_stage = harness.Stage("04_implementation", "Implementation", prompt, "result.md")
-            preferred = harness.build_stage_messages(
+            seed = pipeline.SeedInput("query", "same-id", "make a game", [], {})
+            stage1 = pipeline.Stage("01_seed_spec", "Seed", prompt, "seed_spec.json")
+            later_stage = pipeline.Stage("04_implementation", "Implementation", prompt, "result.md")
+            preferred = pipeline.build_stage_messages(
                 seed=seed, stage=stage1, previous=[], feedback="",
                 use_skill_cards=False, spatial_dimension_preference_rate=1.0,
             )
-            neutral = harness.build_stage_messages(
+            neutral = pipeline.build_stage_messages(
                 seed=seed, stage=stage1, previous=[], feedback="",
                 use_skill_cards=False, spatial_dimension_preference_rate=0.0,
             )
-            later = harness.build_stage_messages(
+            later = pipeline.build_stage_messages(
                 seed=seed, stage=later_stage, previous=[], feedback="",
                 use_skill_cards=False, spatial_dimension_preference_rate=1.0,
             )
@@ -73,7 +73,7 @@ class WebGameAdapterTests(unittest.TestCase):
             "product_identity": {"asset_production_mode": "procedural_pixel"},
             "gameplay_spec": {}, "presentation_and_technology": {}, "asset_contract": {},
         }
-        query = harness.build_rle_query(harness.query_seed("pixel art platformer"), [], "", spec)
+        query = pipeline.build_rle_query(pipeline.query_seed("pixel art platformer"), [], "", spec)
         self.assertIn("Do not call generate_image or fetch_media", query)
         self.assertNotIn("Call generate_image separately", query)
 
@@ -90,31 +90,31 @@ class WebGameAdapterTests(unittest.TestCase):
                 "source": "canvas_draw", "composition_and_layers": "test panel",
             }]},
         }
-        query = harness.compose_final_rle_query("# Game", spec)
+        query = pipeline.compose_final_rle_query("# Game", spec)
         self.assertEqual(
-            query.count(harness.SCREEN_SPACE_DIRECTIONAL_CONTROL_REMINDER), 1
+            query.count(pipeline.SCREEN_SPACE_DIRECTIONAL_CONTROL_REMINDER), 1
         )
         self.assertNotIn("test every bound direction separately", query)
         spec["gameplay_spec"] = {}
-        query_without_movement = harness.compose_final_rle_query("# Game", spec)
-        self.assertNotIn(harness.SCREEN_SPACE_DIRECTIONAL_CONTROL_REMINDER, query_without_movement)
+        query_without_movement = pipeline.compose_final_rle_query("# Game", spec)
+        self.assertNotIn(pipeline.SCREEN_SPACE_DIRECTIONAL_CONTROL_REMINDER, query_without_movement)
         spec["gameplay_spec"] = {"controls": {"movement": "WASD"}}
         spec["product_identity"]["rendering_branch"] = "2.5d"
-        query_2_5d = harness.compose_final_rle_query("# Game", spec)
-        self.assertNotIn(harness.SCREEN_SPACE_DIRECTIONAL_CONTROL_REMINDER, query_2_5d)
+        query_2_5d = pipeline.compose_final_rle_query("# Game", spec)
+        self.assertNotIn(pipeline.SCREEN_SPACE_DIRECTIONAL_CONTROL_REMINDER, query_2_5d)
         spec["gameplay_spec"] = {
             "controls": {"movement": "Left/Right"},
             "camera_contract": "fixed side-view vehicle game",
         }
         spec["product_identity"]["rendering_branch"] = "2d"
-        query_2d = harness.compose_final_rle_query("# Game", spec)
-        self.assertNotIn(harness.SCREEN_SPACE_DIRECTIONAL_CONTROL_REMINDER, query_2d)
+        query_2d = pipeline.compose_final_rle_query("# Game", spec)
+        self.assertNotIn(pipeline.SCREEN_SPACE_DIRECTIONAL_CONTROL_REMINDER, query_2d)
         self.assertEqual(
-            query_2d.count(harness.SIDE_VIEW_ASSET_ORIENTATION_REMINDER), 1
+            query_2d.count(pipeline.SIDE_VIEW_ASSET_ORIENTATION_REMINDER), 1
         )
         spec["gameplay_spec"]["camera_contract"] = "top-down vehicle game"
-        query_top_down = harness.compose_final_rle_query("# Game", spec)
-        self.assertNotIn(harness.SIDE_VIEW_ASSET_ORIENTATION_REMINDER, query_top_down)
+        query_top_down = pipeline.compose_final_rle_query("# Game", spec)
+        self.assertNotIn(pipeline.SIDE_VIEW_ASSET_ORIENTATION_REMINDER, query_top_down)
 
     def test_side_view_orientation_contract_survives_final_asset_table(self):
         asset = {
@@ -130,7 +130,7 @@ class WebGameAdapterTests(unittest.TestCase):
             },
             "runtime_flip_policy": "verify_then_flip_once",
         }
-        table = harness.deterministic_asset_table({
+        table = pipeline.deterministic_asset_table({
             "product_identity": {"asset_production_mode": "generated_hybrid"},
             "presentation_and_technology": {},
             "asset_contract": {"required_assets": [asset]},
@@ -152,7 +152,7 @@ class WebGameAdapterTests(unittest.TestCase):
                 "ui_assets": [], "effect_assets": [], "three_d_assets": [],
                 "scene_composition_assets": [],
             }))
-            harness.validate_text_visual_manifest(path)
+            pipeline.validate_text_visual_manifest(path)
 
     def row(self):
         return {
@@ -166,7 +166,7 @@ class WebGameAdapterTests(unittest.TestCase):
         }
 
     def test_text_only_adapter(self):
-        seed = harness.webgame_seed_from_row(self.row(), position=1)
+        seed = pipeline.webgame_seed_from_row(self.row(), position=1)
         self.assertEqual(seed.source_kind, "webgame_text")
         self.assertEqual(seed.image_urls, [])
         self.assertEqual(seed.metadata["categories"], ["Puzzle", "Casual"])
@@ -174,8 +174,8 @@ class WebGameAdapterTests(unittest.TestCase):
         self.assertNotIn("source_url", seed.metadata)
 
     def test_item_identity_does_not_depend_on_jsonl_position(self):
-        first = harness.webgame_seed_from_row(self.row(), position=1)
-        moved = harness.webgame_seed_from_row(self.row(), position=99)
+        first = pipeline.webgame_seed_from_row(self.row(), position=1)
+        moved = pipeline.webgame_seed_from_row(self.row(), position=99)
         self.assertEqual(first.data_id, moved.data_id)
         self.assertEqual(first.metadata["input_fingerprint"], moved.metadata["input_fingerprint"])
         self.assertEqual(first.metadata["source_record_id"], "1")
@@ -183,24 +183,24 @@ class WebGameAdapterTests(unittest.TestCase):
     def test_explicit_input_data_id_has_priority(self):
         row = self.row()
         row["data_id"] = "catalog-game-42"
-        seed = harness.webgame_seed_from_row(row, position=3)
+        seed = pipeline.webgame_seed_from_row(row, position=3)
         self.assertEqual(seed.metadata["source_record_id"], "catalog-game-42")
         self.assertEqual(seed.data_id, "catalog-game-42")
 
     def test_reference_title_is_removed_downstream(self):
-        seed = harness.webgame_seed_from_row(self.row(), position=1)
+        seed = pipeline.webgame_seed_from_row(self.row(), position=1)
         self.assertEqual(
-            harness.redact_reference_identity("Build Reference Title now", seed),
+            pipeline.redact_reference_identity("Build Reference Title now", seed),
             "Build [REFERENCE_TITLE_REMOVED] now",
         )
 
     def test_stage_one_message_is_text_only(self):
-        seed = harness.webgame_seed_from_row(self.row(), position=1)
+        seed = pipeline.webgame_seed_from_row(self.row(), position=1)
         with tempfile.TemporaryDirectory() as temp:
             prompt = Path(temp) / "prompt.md"
             prompt.write_text("system")
-            stage = harness.Stage("01_seed_spec", "Seed", prompt, "seed_spec.json")
-            messages = harness.build_stage_messages(seed=seed, stage=stage, previous=[], feedback="")
+            stage = pipeline.Stage("01_seed_spec", "Seed", prompt, "seed_spec.json")
+            messages = pipeline.build_stage_messages(seed=seed, stage=stage, previous=[], feedback="")
         self.assertIsInstance(messages[1]["content"], str)
 
     def test_deduplicated_corpus_envelope(self):
@@ -224,7 +224,7 @@ class WebGameAdapterTests(unittest.TestCase):
                 "tags": ["logic", "Kids Friendly"],
             },
         }
-        seed = harness.webgame_seed_from_row(row, position=7)
+        seed = pipeline.webgame_seed_from_row(row, position=7)
         self.assertEqual(seed.source_kind, "webgame_text")
         self.assertEqual(seed.data_id, "web_games_abcdef")
         self.assertEqual(seed.metadata["description"], "Remove every screw from the board.")
@@ -234,13 +234,13 @@ class WebGameAdapterTests(unittest.TestCase):
         self.assertEqual(seed.metadata["source_origin"], "web_games")
         self.assertNotIn("source_url", seed.metadata)
         self.assertEqual(
-            harness.webgame_source_record_id(row), "web_games:abcdef"
+            pipeline.webgame_source_record_id(row), "web_games:abcdef"
         )
 
 
 class VisualContractTests(unittest.TestCase):
     def test_batch_query_export_preserves_input_order_and_shape(self):
-        stages = harness.parse_stages(Path(__file__).with_name("stages.json"))
+        stages = pipeline.parse_stages(Path(__file__).with_name("stages.json"))
         rows = []
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
@@ -250,7 +250,7 @@ class VisualContractTests(unittest.TestCase):
                     "description": "Match items.", "instructions": "Click matching items.",
                 }
                 rows.append(row)
-                seed = harness.webgame_seed_from_row(row, position=position)
+                seed = pipeline.webgame_seed_from_row(row, position=position)
                 run = root / seed.data_id
                 artifacts = [
                     {"prd_request": "Match", "game_dimension": "2d"},
@@ -264,16 +264,16 @@ class VisualContractTests(unittest.TestCase):
                     stage_dir = run / "stages" / stage.stage_id
                     stage_dir.mkdir(parents=True)
                     (stage_dir / stage.artifact_file).write_text(json.dumps(content))
-            result = harness.prepare_webgame_rle_inputs(rows=rows, root=root, stages=stages)
+            result = pipeline.prepare_webgame_rle_inputs(rows=rows, root=root, stages=stages)
             self.assertEqual(result, {"prepared": 2, "failed": 0})
             exported = [json.loads(line) for line in (root / "rle_inputs.jsonl").read_text().splitlines()]
             self.assertEqual([item["data_id"] for item in exported], ["Data1", "Data2"])
             self.assertTrue(all(set(item) == {"data_id", "query"} for item in exported))
 
     def test_rle_query_enforces_image_tool_execution(self):
-        seed = harness.query_seed("puzzle")
+        seed = pipeline.query_seed("puzzle")
         spec = {"asset_execution_contract": {"required_assets": [{"source": "generate_image"}]}}
-        query = harness.build_rle_query(seed, [], "", spec)
+        query = pipeline.build_rle_query(seed, [], "", spec)
         self.assertIn("Call generate_image separately", query)
         self.assertIn("If no generate_image call is made", query)
         self.assertNotRegex(query, r"[\u4e00-\u9fff]")
@@ -282,9 +282,9 @@ class VisualContractTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp) / "asset_manifest.json"
             path.write_text(json.dumps({"visual_assets": [], "scene_composition_assets": []}))
-            harness.validate_text_visual_manifest(path)
+            pipeline.validate_text_visual_manifest(path)
             with self.assertRaisesRegex(ValueError, "Deterministic asset table is empty"):
-                harness.compose_final_rle_query("Build a game", {
+                pipeline.compose_final_rle_query("Build a game", {
                     "product_identity": {}, "gameplay_spec": {},
                     "presentation_and_technology": {}, "asset_contract": {},
                 })
@@ -308,7 +308,7 @@ class VisualContractTests(unittest.TestCase):
                      "background_only": True},
                 ],
             }))
-            harness.validate_text_visual_manifest(path)
+            pipeline.validate_text_visual_manifest(path)
 
     def test_generated_transparent_foreground_is_accepted(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -327,7 +327,7 @@ class VisualContractTests(unittest.TestCase):
                 ],
                 "scene_composition_assets": [],
             }))
-            harness.validate_text_visual_manifest(path)
+            pipeline.validate_text_visual_manifest(path)
 
     def test_generated_foreground_without_transparency_is_rejected(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -344,7 +344,7 @@ class VisualContractTests(unittest.TestCase):
                 "scene_composition_assets": [],
             }))
             with self.assertRaisesRegex(ValueError, "transparent foregrounds"):
-                harness.validate_text_visual_manifest(path)
+                pipeline.validate_text_visual_manifest(path)
 
     def test_background_only_scene_composition_counts_as_generated_background(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -360,7 +360,7 @@ class VisualContractTests(unittest.TestCase):
                     "background_only": True,
                 }],
             }))
-            harness.validate_text_visual_manifest(path)
+            pipeline.validate_text_visual_manifest(path)
 
 
 class ShaderContractTests(unittest.TestCase):
@@ -391,7 +391,7 @@ class ShaderContractTests(unittest.TestCase):
 
     def test_shader_contract_survives_deterministic_asset_table(self):
         asset = self.shader_asset()
-        table = harness.deterministic_asset_table({
+        table = pipeline.deterministic_asset_table({
             "product_identity": {"asset_production_mode": "generated_hybrid"},
             "presentation_and_technology": {},
             "asset_contract": {"required_assets": [asset]},
@@ -405,7 +405,7 @@ class ShaderContractTests(unittest.TestCase):
         asset = self.shader_asset()
         asset["uniform_contract"] = {"iChannel0": "water texture"}
         with self.assertRaisesRegex(ValueError, "unresolved Shadertoy"):
-            harness.validate_inline_shader_asset(asset)
+            pipeline.validate_inline_shader_asset(asset)
 
 
 if __name__ == "__main__":

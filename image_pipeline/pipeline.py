@@ -25,7 +25,7 @@ from skill_router import route_skill_guidance
 
 try:
     import tiktoken
-except ImportError:  # Keep the Harness usable in minimal environments.
+except ImportError:  # Keep the pipeline usable in minimal environments.
     tiktoken = None
 
 
@@ -418,7 +418,7 @@ def parse_stages(config_path: Path) -> List[Stage]:
             max_revisions=int(item.get("max_revisions", root.get("max_revisions", 1))),
         ))
     if len(stages) != 4 or stages[-1].stage_id != "04_implementation":
-        raise ValueError("Harness Steam config must contain exactly four stages ending in 04_implementation")
+        raise ValueError("Image Pipeline config must contain exactly four stages ending in 04_implementation")
     return stages
 
 
@@ -1145,7 +1145,7 @@ def build_rle_query(seed: SeedInput, previous: List[Dict[str, str]], feedback: s
         "trademarks, copy, assets, or pixel-level UI."
     )
     parts = [
-        "# GameFactory Harness Steam: Browser Game Implementation Query",
+        "# GameGo Image Pipeline: Browser Game Implementation Query",
         source_notice,
         "# Canonical selected specification (sole source of truth)",
         json.dumps(spec, ensure_ascii=False, separators=(",", ":")),
@@ -1711,7 +1711,7 @@ def run_rle(*, args: argparse.Namespace, run_dir: Path, stage: Stage, stage_dir:
                     for line in proc.stdout:
                         stdout_log.write(line)
                         stdout_log.flush()
-                        # Also surface the child log in the Harness/batch log.
+                        # Also surface the child log in the pipeline/batch log.
                         print(f"[{seed.data_id} RLE] {line}", end="", flush=True)
 
                 reader = threading.Thread(target=stream_rle_stdout, daemon=True)
@@ -1868,7 +1868,7 @@ def run_stage(*, args: argparse.Namespace, run_dir: Path, seed: SeedInput, stage
     stale_artifact = stage_dir / stage.artifact_file
     if stale_artifact.exists():
         stale_artifact.unlink()
-    # Keep the V2 stage execution path exactly; Harness Steam's lifecycle change is
+    # Keep the stage execution path unchanged; query export is
     # that the review result is always approved with no feedback or stdin.
     feedback = ""
     for attempt in range(stage.max_revisions + 1):
@@ -2259,11 +2259,11 @@ def prepare_steam_rle_inputs(*, rows: List[Dict[str, Any]], root: Path,
 
 def main() -> None:
     global API_RETRY_BACKOFF_MODE
-    parser = argparse.ArgumentParser(description="GameFactory Harness Steam: unattended Steam-game generation pipeline")
+    parser = argparse.ArgumentParser(description="GameGo image-input task construction")
     inputs = parser.add_mutually_exclusive_group(required=True)
     inputs.add_argument("--query")
     inputs.add_argument("--query-file", type=Path)
-    inputs.add_argument("--steam-jsonl", type=Path)
+    inputs.add_argument("--seed-jsonl", "--steam-jsonl", dest="steam_jsonl", type=Path)
     parser.add_argument("--config", type=Path, required=True)
     parser.add_argument("--run-dir", type=Path)
     parser.add_argument("--batch-limit", type=int, default=0)
@@ -2362,7 +2362,7 @@ def main() -> None:
         if args.batch_limit > 0:
             rows = rows[:args.batch_limit]
         root = args.run_dir.resolve() if args.run_dir else (args.config.parent / "result" / f"steam_batch_{timestamp}").resolve()
-        # Harness Steam is query-only. Each item flows directly from planning
+        # Image Pipeline is query-only. Each item flows directly from planning
         # through Compact into the ordered JSONL; RLE is never launched here.
         if stop >= 2:
             if start <= 2:
@@ -2396,7 +2396,7 @@ def main() -> None:
                 if prepared_result["failed"]:
                     raise SystemExit(1)
                 prepared = prepared_result["prepared"]
-            print(f"\nHarness Steam query export complete: {prepared} row(s): {root / 'rle_inputs.jsonl'}")
+            print(f"\nImage Pipeline query export complete: {prepared} row(s): {root / 'rle_inputs.jsonl'}")
             return
         else:
             summary = run_steam_batch(
@@ -2416,7 +2416,7 @@ def main() -> None:
     run_dir = args.run_dir.resolve() if args.run_dir else (args.config.parent / "result" / f"run_{timestamp}").resolve()
     if stop < 2:
         run_one(args=args, seed=seed, run_dir=run_dir, stages=stages, start=start, stop=stop, api_key=api_key)
-        print(f"\nHarness Steam planning complete: {run_dir}")
+        print(f"\nImage Pipeline planning complete: {run_dir}")
         return
     if start <= 2:
         run_one(args=args, seed=seed, run_dir=run_dir, stages=stages, start=start, stop=2, api_key=api_key)
@@ -2427,7 +2427,7 @@ def main() -> None:
     write_text(run_dir / "rle_inputs.jsonl", json.dumps({
         "data_id": seed.data_id, "query": str(payload["query"]),
     }, ensure_ascii=False) + "\n")
-    print(f"\nHarness Steam query export complete: {run_dir / 'rle_inputs.jsonl'}")
+    print(f"\nImage Pipeline query export complete: {run_dir / 'rle_inputs.jsonl'}")
 
 
 if __name__ == "__main__":

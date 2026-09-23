@@ -581,7 +581,7 @@ def call_chat_completion(*, base_url: str, api_key: str, model: str, messages: L
     last_error: Optional[BaseException] = None
     for attempt in range(retries + 1):
         proxy_session_id = (
-            f"gamefactory-webgame-v5-{os.getpid()}-{attempt}-{time.time_ns()}"
+            f"gamego-text-{os.getpid()}-{attempt}-{time.time_ns()}"
         )
         request = urllib.request.Request(normalize_chat_url(base_url), data=body, method="POST", headers={
             "Authorization": f"Bearer {api_key}", "Content-Type": "application/json",
@@ -1097,7 +1097,7 @@ def build_rle_query(seed: SeedInput, previous: List[Dict[str, str]], feedback: s
             "If generate_image fails, preserve and report the original tool error before degrading that individual asset. If no generate_image call is made, the implementation is incomplete even if build_project succeeds.",
         ]
     parts = [
-        "# GameFactory WebGame Pipeline V5: Generated-Asset Web Game Implementation",
+        "# GameGo Text Pipeline: Generated-Asset Web Game Implementation",
         "This is a new, standalone game-generation task. Catalog text was used only to extract transferable abstract mechanics. There are no reference images; all visuals and assets were designed originally during planning. Do not copy any source title, site identity, character, location, trademark, copy, or asset.",
         "# Canonical selected specification (sole source of truth)",
         json.dumps(spec, ensure_ascii=False, separators=(",", ":")),
@@ -1884,11 +1884,11 @@ def prepare_webgame_rle_inputs(*, rows: List[Dict[str, Any]], root: Path,
 
 def main() -> None:
     global API_RETRY_BACKOFF_MODE
-    parser = argparse.ArgumentParser(description="GameFactory WebGame Pipeline V5: generated background and foreground web-game pipeline")
+    parser = argparse.ArgumentParser(description="GameGo text-input task construction")
     inputs = parser.add_mutually_exclusive_group(required=True)
     inputs.add_argument("--query")
     inputs.add_argument("--query-file", type=Path)
-    inputs.add_argument("--webgame-jsonl", type=Path)
+    inputs.add_argument("--seed-jsonl", "--webgame-jsonl", dest="webgame_jsonl", type=Path)
     parser.add_argument("--config", type=Path, required=True)
     parser.add_argument("--run-dir", type=Path)
     parser.add_argument("--batch-limit", type=int, default=0)
