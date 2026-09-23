@@ -103,4 +103,6 @@ These tests do not call model APIs. Two historical comparisons against a separat
 
 ## Benchmark and demonstrations
 
-The test-query package is maintained separately from this code repository. Training data are not distributed. Demonstrations will use videos; no live game hosting is included in this package.
+The 124 GameGoBench test queries are provided in [benchmarks/gamegobench/test.jsonl](benchmarks/gamegobench/test.jsonl). Each line is a JSON object with `data_id` and `query`. The file is identical to the separately distributed test-query package. Use these tasks for held-out evaluation, not training or model tuning.
+
+Training data are not distributed. Demonstrations will use videos; no live game hosting is included in this package.
