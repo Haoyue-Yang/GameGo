@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "max_cards_per_stage": 4,
+  "cards": {
+    "routing_observer": {"file": "routing_observer.md"},
+    "gameplay_core": {"file": "gameplay_core.md"},
+    "action_combat": {"file": "action_combat.md"},
+    "level_flow": {"file": "level_flow.md"},
+    "animation_game_feel": {"file": "animation_game_feel.md"},
+    "audio_web": {"file": "audio_web.md"},
+    "art_bible_compact": {"file": "art_bible_compact.md"},
+    "asset_source_gate": {"file": "asset_source_gate.md"},
+    "shader_fx": {"file": "shader_fx.md"},
+    "sprite_pipeline": {"file": "sprite_pipeline.md"}
+  }
+}

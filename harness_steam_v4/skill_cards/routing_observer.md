@@ -1,0 +1,1 @@
+Identify only source-supported specialist needs for later planning: combat timing, spatial level flow, motion/game feel, audio state, visual consistency, or sprite production. Express those needs through the existing classification, attention-point, locked-requirement, and evidence fields. Do not add a skill list or invent a feature.

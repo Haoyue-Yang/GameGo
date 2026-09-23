@@ -1,0 +1,33 @@
+{
+  "max_revisions": 1,
+  "stages": [
+    {
+      "id": "01_seed_spec",
+      "name": "Seed Distillation",
+      "prompt_file": "prompts/01_seed_spec.md",
+      "artifact_file": "seed_spec.json",
+      "description": "把普通需求或网页游戏纯文字种子提炼为去标识的产品需求，并原创规划视觉方向。"
+    },
+    {
+      "id": "02_game_blueprint",
+      "name": "Game Production Blueprint",
+      "prompt_file": "prompts/02_game_blueprint.md",
+      "artifact_file": "game_blueprint.json",
+      "description": "一次性完成玩法、状态流、场景、功能、转场、范围、技术、Shader机会和验收规划。"
+    },
+    {
+      "id": "03_asset_contract",
+      "name": "Asset Contract",
+      "prompt_file": "prompts/03_asset_contract.md",
+      "artifact_file": "asset_manifest.json",
+      "description": "为蓝图中的每个关键场景和功能规定必须落地的资产、Shader模块、生成 prompt、路径和验收标准。"
+    },
+    {
+      "id": "04_implementation",
+      "name": "RLE Implementation",
+      "prompt_file": "prompts/04_implementation.md",
+      "artifact_file": "implementation_response.md",
+      "description": "将三个已批准产物合成为一次 RLE 输入并生成完整浏览器游戏。"
+    }
+  ]
+}

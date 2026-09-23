@@ -1,0 +1,1 @@
+Design outward from player experience. For each important mechanic make purpose, player verb, state input/output, feedback, reward or consequence, failure state, edge cases, and tuning levers implementable. Distinguish moment-to-moment play from the complete session journey. Complexity is justified only when it creates a meaningful decision.
