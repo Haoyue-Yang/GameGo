@@ -4,13 +4,23 @@
 
 ### Training Game-Dev Agents with Synthetic Trajectories Anchored in Real-World Assets
 
-[![GameGoBench](https://img.shields.io/badge/GameGoBench-124%20tasks-4c78a8.svg)](#gamegobench)
+[![GameGoCoder 3.5](https://img.shields.io/badge/Hugging%20Face-GameGoCoder%203.5-yellow.svg)](https://huggingface.co/Y36521478Y/GameGoCoder3_5)
+[![GameGoCoder 3.8](https://img.shields.io/badge/Hugging%20Face-GameGoCoder%203.8-yellow.svg)](https://huggingface.co/Y36521478Y/GameGoCoder3_8)
+[![GameGoBench](https://img.shields.io/badge/Hugging%20Face-GameGoBench%20124%20tasks-yellow.svg)](https://huggingface.co/datasets/Y36521478Y/GameGo)
 [![GameGoData](https://img.shields.io/badge/GameGoData-55%2C060%20trajectories-59a14f.svg)](#gamegodata)
 [![License](https://img.shields.io/badge/License-TBD-lightgrey.svg)](#license)
 
 **GameGo** is a data-centric framework for training coding agents to create playable browser games. It turns real-world game seeds into structured development specifications, selects a compact task-specific interface for rollout, and collects executable development trajectories as process supervision.
 
 </div>
+
+## Models and benchmark
+
+| Resource | Hugging Face |
+| --- | --- |
+| **GameGoCoder 3.5** | [Model weights](https://huggingface.co/Y36521478Y/GameGoCoder3_5) |
+| **GameGoCoder 3.8** | [Model weights](https://huggingface.co/Y36521478Y/GameGoCoder3_8) |
+| **GameGoBench** | [124 held-out test queries](https://huggingface.co/datasets/Y36521478Y/GameGo) |
 
 <p align="center">
   <img src="figure/T_soft_palette_overview_v2.png" alt="GameGo task-adaptive query construction" width="100%" />
