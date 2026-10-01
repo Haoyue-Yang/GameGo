@@ -4,23 +4,23 @@
 
 ### Training Game-Dev Agents with Synthetic Trajectories Anchored in Real-World Assets
 
-[![Paper source](https://img.shields.io/badge/Paper%20source-ICLR%202027-b31b1b.svg)](./iclr2027_conference.tex)
-[![Tasks](https://img.shields.io/badge/GameGoBench-124%20tasks-4c78a8.svg)](#gamegobench)
-[![Training data](https://img.shields.io/badge/GameGoData-55%2C060%20trajectories-59a14f.svg)](#gamegodata)
+[![GameGoBench](https://img.shields.io/badge/GameGoBench-124%20tasks-4c78a8.svg)](#gamegobench)
+[![GameGoData](https://img.shields.io/badge/GameGoData-55%2C060%20trajectories-59a14f.svg)](#gamegodata)
+[![License](https://img.shields.io/badge/License-TBD-lightgrey.svg)](#license)
 
 **GameGo** is a data-centric framework for training coding agents to create playable browser games. It turns real-world game seeds into structured development specifications, selects a compact task-specific interface for rollout, and collects executable development trajectories as process supervision.
 
 </div>
 
 <p align="center">
-  <img src="figure/T_soft_palette_overview_v2.png" alt="GameGo task-adaptive query construction results" width="100%" />
+  <img src="figure/T_soft_palette_overview_v2.png" alt="GameGo task-adaptive query construction" width="100%" />
 </p>
 
 ## Overview
 
 Game creation is a long-horizon software task: an agent must coordinate gameplay rules, state transitions, controls, spatial interaction, assets, visual presentation, and runtime verification in one executable artifact. Short user requests leave these dependencies implicit, while exhaustive specifications can burden the rollout agent with unnecessary commitments.
 
-GameGo addresses this task-interface gap with an **expand-then-project** pipeline:
+GameGo uses an **expand-then-project** pipeline:
 
 ```text
 real-world game seed
@@ -71,13 +71,7 @@ GameGoData composition is **61.4% 2D**, **20.1% 2.5D**, and **18.5% 3D**. GameGo
 
 ## GameGoBench
 
-GameGoBench is a held-out benchmark for evaluating game-development agents under a shared browser-game scaffold and sandbox budget. Evaluation considers:
-
-- execution and runtime success;
-- satisfaction of task requirements;
-- visual and interaction quality.
-
-The benchmark is kept separate from the training seed pool from the task-construction stage onward.
+GameGoBench evaluates game-development agents under a shared browser-game scaffold and sandbox budget. Evaluation considers execution success, task-requirement satisfaction, and visual and interaction quality. Benchmark seeds are kept separate from the training seed pool from the task-construction stage onward.
 
 ## Results
 
@@ -90,47 +84,55 @@ GameGoCoder is trained with standard supervised fine-tuning on GameGoData. On th
 | Qwen3.8-27B | 100.00 | 62.81 | 42.25 | 52.53 |
 | **GameGoCoder 3.8** | **100.00** | **66.94** | **43.64** | **55.29** |
 
-The task-construction ablation on 124 benchmark tasks shows that compact task-specific queries are preferred over full PRDs in **85.7%** of non-tied judgments and over direct queries in **86.6%**. They achieve a median **3.79× relation-density gain** while retaining a concise, complexity-adaptive length.
+Task-specific compact queries are preferred over full PRDs in **85.7%** of non-tied human judgments and over direct queries in **86.6%**. They achieve a median **3.79× relation-density gain** with complexity-adaptive query lengths.
 
 <p align="center">
   <img src="figure/pairwise_result_v2.png" alt="Human pairwise preference results" width="100%" />
 </p>
 
+## Qualitative examples
+
+Representative generated games across 2D, 2.5D, and 3D settings are shown below.
+
+<p align="center">
+  <img src="figure/figure_1_6games.png" alt="Qualitative game-generation examples, part one" width="100%" />
+</p>
+
+<p align="center">
+  <img src="figure/figure_2_6games.png" alt="Qualitative game-generation examples, part two" width="100%" />
+</p>
+
+The full pipeline overview is available as [the main figure PDF](./figure/mainpic.pdf).
+
 ## Repository contents
 
-This repository snapshot contains the paper source and publication figures:
+This repository is the lightweight project page for GameGo:
 
 ```text
 .
-├── iclr2027_conference.tex       # Paper source
-├── iclr2027_conference.bib       # Bibliography
-├── math_commands.tex             # LaTeX math commands
-├── figure/                       # Overview, analysis, and qualitative figures
-└── README.md
+├── README.md
+└── figure/
+    ├── mainpic.pdf
+    ├── T_soft_palette_overview_v2.png
+    ├── train_test_spaced.png
+    ├── pairwise_result_v2.png
+    ├── figure_1_6games.png
+    └── figure_2_6games.png
 ```
 
-The data-manufacturing pipeline and benchmark release are maintained separately and will be linked here as their public release packages are attached to the `GameGo` repository.
-
-## Paper
-
-- [Paper source](./iclr2027_conference.tex)
-- [Bibliography](./iclr2027_conference.bib)
+Training code, datasets, and model checkpoints will be linked here when their public release packages are available.
 
 ## Citation
-
-If you find GameGo useful, please cite:
 
 ```bibtex
 @inproceedings{gamego2027,
   title     = {GameGo: Training Game-Dev Agents with Synthetic Trajectories Anchored in Real-World Assets},
-  author    = {Yang, Haoyue and others},
+  author    = {GameGo Authors},
   booktitle = {International Conference on Learning Representations},
   year      = {2027}
 }
 ```
 
-The author list and final bibliographic fields will be updated with the camera-ready version.
+## License
 
-## Contact
-
-For questions and collaboration, please open an issue in the [GameGo repository](https://github.com/Haoyue-Yan/GameGo).
+The license for the released figures and accompanying materials is **TBD**.
