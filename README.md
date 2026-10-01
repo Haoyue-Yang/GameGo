@@ -1,108 +1,136 @@
+<div align="center">
+
 # GameGo
 
-GameGo constructs game-development tasks through structured planning. This repository contains two task-construction pipelines:
+### Training Game-Dev Agents with Synthetic Trajectories Anchored in Real-World Assets
 
-| Directory | Input | Image handling |
-|---|---|---|
-| `image_pipeline` | Game descriptions, metadata, and optional screenshots | Up to five screenshots are supplied to Stage 1 |
-| `text_pipeline` | Game titles, descriptions, instructions, categories, and tags | Text only; source URLs are not fetched |
+[![Paper source](https://img.shields.io/badge/Paper%20source-ICLR%202027-b31b1b.svg)](./iclr2027_conference.tex)
+[![Tasks](https://img.shields.io/badge/GameGoBench-124%20tasks-4c78a8.svg)](#gamegobench)
+[![Training data](https://img.shields.io/badge/GameGoData-55%2C060%20trajectories-59a14f.svg)](#gamegodata)
 
-Both pipelines produce a seed specification, a game blueprint, and an asset contract. They select a canonical specification and apply Protected Domain Compact to export execution queries.
+**GameGo** is a data-centric framework for training coding agents to create playable browser games. It turns real-world game seeds into structured development specifications, selects a compact task-specific interface for rollout, and collects executable development trajectories as process supervision.
+
+</div>
+
+<p align="center">
+  <img src="figure/T_soft_palette_overview_v2.png" alt="GameGo task-adaptive query construction results" width="100%" />
+</p>
+
+## Overview
+
+Game creation is a long-horizon software task: an agent must coordinate gameplay rules, state transitions, controls, spatial interaction, assets, visual presentation, and runtime verification in one executable artifact. Short user requests leave these dependencies implicit, while exhaustive specifications can burden the rollout agent with unnecessary commitments.
+
+GameGo addresses this task-interface gap with an **expand-then-project** pipeline:
 
 ```text
-Game seed
-  -> Seed specification
-  -> Game blueprint
-  -> Asset contract
-  -> Canonical specification and Protected Domain Compact
-  -> Execution query JSONL
+real-world game seed
+        │
+        ▼
+structured planning and asset grounding
+        │
+        ▼
+full Product Requirements Document (PRD)
+        │
+        ▼
+task-adaptive compact query
+        │
+        ▼
+teacher-agent rollout in a sandbox
+        │
+        ▼
+validated trajectory + runnable game artifact
+        │
+        ▼
+GameGoCoder supervised fine-tuning
 ```
 
-## Scope
+The PRD is a coverage-oriented internal representation. The compact query preserves task identity, executable dependencies, controls, spatial contracts, and success or recovery paths while leaving routine implementation choices open to the coding agent.
 
-This package includes planning prompts, rendering and gameplay routing, skill cards, asset validation, and query export. It does not include the training dataset, teacher credentials or identity, production execution infrastructure, model checkpoints, or training trajectories. The later adaptive query conversion policy is not included in these two pipeline snapshots. This repository is not a complete reproduction package for all paper experiments.
+## Highlights
 
-The batch JSONL interfaces below construct queries without executing games. Legacy execution hooks require a user-supplied runner and are not needed for query construction.
+- **Real-world grounded task synthesis.** Game seeds are collected from public game catalogs and normalized before planning.
+- **Three-dimensional coverage.** GameGoData spans 2D, 2.5D, and 3D browser games across 20 gameplay categories.
+- **Process-grounded supervision.** Each retained example contains a development trajectory paired with a verified runnable artifact.
+- **Adaptive task interfaces.** Query detail grows with task complexity instead of applying one fixed prompt length.
+- **End-to-end evaluation.** GameGoCoder is evaluated on ArtifactsBench-G, CookieBench-G, and the held-out GameGoBench.
 
-## Installation
+## GameGoData
 
-Use Python 3.10 or later:
+GameGoData contains **55,060** filtered development trajectories. The data pipeline records teacher-agent messages, tool calls, tool responses, and the final project, then keeps examples that pass execution, artifact-integrity, and formatting checks.
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements.txt
+<p align="center">
+  <img src="figure/train_test_spaced.png" alt="GameGoData and GameGoBench composition" width="100%" />
+</p>
+
+| Split | Count | Description |
+| --- | ---: | --- |
+| GameGoData | 55,060 | Training trajectories with runnable browser-game artifacts |
+| GameGoBench | 124 | Held-out game-development tasks for evaluation |
+
+GameGoData composition is **61.4% 2D**, **20.1% 2.5D**, and **18.5% 3D**. GameGoBench contains **47 2D**, **22 2.5D**, and **55 3D** tasks, stratified into Easy, Medium, and Hard difficulty levels.
+
+## GameGoBench
+
+GameGoBench is a held-out benchmark for evaluating game-development agents under a shared browser-game scaffold and sandbox budget. Evaluation considers:
+
+- execution and runtime success;
+- satisfaction of task requirements;
+- visual and interaction quality.
+
+The benchmark is kept separate from the training seed pool from the task-construction stage onward.
+
+## Results
+
+GameGoCoder is trained with standard supervised fine-tuning on GameGoData. On the held-out GameGoBench, it improves over its matched base models:
+
+| Model | Execution | Requirements | Quality | Overall |
+| --- | ---: | ---: | ---: | ---: |
+| Qwen3.5-27B | 91.80 | 36.89 | 31.12 | 34.00 |
+| **GameGoCoder 3.5** | **98.29** | **57.99** | **45.72** | **51.85** |
+| Qwen3.8-27B | 100.00 | 62.81 | 42.25 | 52.53 |
+| **GameGoCoder 3.8** | **100.00** | **66.94** | **43.64** | **55.29** |
+
+The task-construction ablation on 124 benchmark tasks shows that compact task-specific queries are preferred over full PRDs in **85.7%** of non-tied judgments and over direct queries in **86.6%**. They achieve a median **3.79× relation-density gain** while retaining a concise, complexity-adaptive length.
+
+<p align="center">
+  <img src="figure/pairwise_result_v2.png" alt="Human pairwise preference results" width="100%" />
+</p>
+
+## Repository contents
+
+This repository snapshot contains the paper source and publication figures:
+
+```text
+.
+├── iclr2027_conference.tex       # Paper source
+├── iclr2027_conference.bib       # Bibliography
+├── math_commands.tex             # LaTeX math commands
+├── figure/                       # Overview, analysis, and qualitative figures
+└── README.md
 ```
 
-The image pipeline uses `tiktoken` when available. Its first use may download the public `cl100k_base` encoding. An approximate byte-based budget is used if `tiktoken` is not installed. The text pipeline uses `json-repair` to recover malformed JSON.
+The data-manufacturing pipeline and benchmark release are maintained separately and will be linked here as their public release packages are attached to the `GameGo` repository.
 
-## Model configuration
+## Paper
 
-Use an API that implements compatible `/v1/chat/completions` requests. Configure your own endpoint, credentials, and model IDs locally:
+- [Paper source](./iclr2027_conference.tex)
+- [Bibliography](./iclr2027_conference.bib)
 
-```bash
-export GAMEGO_BASE_URL='https://your-provider.example/v1'
-export GAMEGO_API_KEY='your-api-key'
-export GAMEGO_MODEL='your-planning-model'
-export GAMEGO_VISION_MODEL='your-vision-model'
-export GAMEGO_COMPACT_MODEL='your-compaction-model'
+## Citation
+
+If you find GameGo useful, please cite:
+
+```bibtex
+@inproceedings{gamego2027,
+  title     = {GameGo: Training Game-Dev Agents with Synthetic Trajectories Anchored in Real-World Assets},
+  author    = {Yang, Haoyue and others},
+  booktitle = {International Conference on Learning Representations},
+  year      = {2027}
+}
 ```
 
-Do not commit credentials. The vision and compaction models default to the planning model when unset. For image inputs, the selected vision model must accept image messages. If your provider rejects the temperature parameter, set `GAMEGO_OMIT_TEMPERATURE=1`.
+The author list and final bibliographic fields will be updated with the camera-ready version.
 
-## Image-capable pipeline
+## Contact
 
-From the repository root:
-
-```bash
-python image_pipeline/pipeline.py \
-  --config image_pipeline/stages.json \
-  --seed-jsonl examples/image_seed.jsonl \
-  --batch-limit 1 \
-  --pipeline-workers 1 \
-  --run-dir outputs/image
-```
-
-The example is a newly written synthetic seed and contains no training or benchmark record. Add your own PNG or JPEG screenshot paths to `media.local_paths` to exercise image input. Paths are resolved from the working directory. The normalized example uses `input_contract: raw_game_v1` and `origin: steam`.
-
-## Text-only pipeline
-
-```bash
-python text_pipeline/pipeline.py \
-  --config text_pipeline/stages.json \
-  --seed-jsonl examples/text_seed.jsonl \
-  --batch-limit 1 \
-  --pipeline-workers 1 \
-  --run-dir outputs/text
-```
-
-The text pipeline resumes completed records by default. Add `--no-resume` to recompute them. The image pipeline supports `--resume`. Both interfaces support `--from-stage`, `--to-stage`, and `--item-retries`. The text pipeline additionally supports `--no-skill-cards`.
-
-These commands call your configured model API and may incur provider charges.
-
-## Output
-
-Each run records stage artifacts, routing decisions, and selected specifications. The batch root contains `rle_inputs.jsonl` with one execution query per successful record:
-
-```json
-{"data_id": "example_001", "query": "Implementation instructions..."}
-```
-
-The final stage also writes `canonical_rle_query.md` and `compact_rle_query.md`. The historical `rle` filename prefix denotes the downstream execution interface; the batch pipeline does not invoke that runner.
-
-Generated outputs can contain input metadata and local paths. They are ignored by Git and should be reviewed separately before sharing.
-
-## Offline checks
-
-```bash
-python -m unittest discover -s image_pipeline -p 'test_*.py'
-python -m unittest discover -s text_pipeline -p 'test_*.py'
-```
-
-These tests do not call model APIs. Two historical comparisons against a separate, unreleased pipeline version are explicitly skipped. See `docs/release_notes.md` for portability changes and the limits of validation.
-
-## Benchmark and demonstrations
-
-The 124 GameGoBench test queries are provided in [benchmarks/gamegobench/test.jsonl](benchmarks/gamegobench/test.jsonl). Each line is a JSON object with `data_id` and `query`. The file is identical to the separately distributed test-query package. Use these tasks for held-out evaluation, not training or model tuning.
-
-Training data are not distributed. Demonstrations will use videos; no live game hosting is included in this package.
+For questions and collaboration, please open an issue in the [GameGo repository](https://github.com/Haoyue-Yan/GameGo).

@@ -1,1 +1,0 @@
-Treat space as gameplay. Make the critical path, optional branch, objective and exit readable through layout, contrast and landmarks. Define entry read time, traversal or encounter beats, fallback space, pacing changes, and merge/exit conditions. Use approximate dimensions only when they materially constrain implementation; simple single-screen games should remain simple.

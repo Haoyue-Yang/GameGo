@@ -1,1 +1,0 @@
-For source-supported combat, define the actionable loop and readable state machine: anticipation, active window, impact, recovery, interruption and cooldown. Specify enemy telegraphs, player counters, hit feedback, spacing, damage or resource consequences, and fair failure recovery. Boss phases need distinct triggers and responses; do not invent a Boss when none is required.
