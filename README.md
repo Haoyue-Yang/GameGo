@@ -22,6 +22,12 @@
 | **GameGoCoder 3.8** | [Model weights](https://huggingface.co/Y36521478Y/GameGoCoder3_8) |
 | **GameGoBench** | [124 held-out test queries](https://huggingface.co/datasets/Y36521478Y/GameGo) |
 
+## Playable GameGoCoder 3.8 examples
+
+[Open the 12-game playable gallery](./games/) to try the successful games from the selected 13-task evaluation set. Each card includes the built browser game, a preview image, and the original artifact tar package.
+
+The gallery covers the appendix showcase tasks across 2D, 2.5D, and 3D settings. The failed selected-set entry is excluded.
+
 <p align="center">
   <img src="figure/T_soft_palette_overview_v2.png" alt="GameGo task-adaptive query construction" width="100%" />
 </p>
@@ -121,6 +127,11 @@ This repository is the lightweight project page for GameGo:
 ```text
 .
 ├── README.md
+├── index.html
+├── games/
+│   ├── index.html
+│   ├── manifest.json
+│   └── 12 playable GameGoCoder 3.8 examples
 └── figure/
     ├── mainpic.pdf
     ├── T_soft_palette_overview_v2.png

@@ -1,0 +1,138 @@
+{
+  "model": "GameGoCoder 3.8",
+  "source": "selected_good_cases_13...traj.jsonl (12 successful cases)",
+  "games": [
+    {
+      "rank": 1,
+      "id": "steam_22221__adaptive_v2_2_2",
+      "title": "NULLROOM — 1-Bit Roguelite Shooter",
+      "description": "2D top-down roguelite shooter with room clearing, power-ups, and an invulnerable dash.",
+      "model": "GameGoCoder 3.8",
+      "status": "success",
+      "play": "./index.html",
+      "source": "./source.tar",
+      "preview": "./preview.png"
+    },
+    {
+      "rank": 2,
+      "id": "steam_23075__adaptive_v2_2_2",
+      "title": "The Vantage Wing — Evidence Deduction",
+      "description": "A 2.5D investigation game built around evidence, witnesses, and changing directives.",
+      "model": "GameGoCoder 3.8",
+      "status": "success",
+      "play": "./index.html",
+      "source": "./source.tar",
+      "preview": "./preview.png"
+    },
+    {
+      "rank": 3,
+      "id": "steam_38035__adaptive_v2_2_2",
+      "title": "The Hollowmere Signal — A Point-and-Click Mystery",
+      "description": "A storm-lashed manor mystery with rooms, clues, items, and questioning.",
+      "model": "GameGoCoder 3.8",
+      "status": "success",
+      "play": "./index.html",
+      "source": "./source.tar",
+      "preview": "./preview.png"
+    },
+    {
+      "rank": 4,
+      "id": "steam_38237__adaptive_v2_2_2",
+      "title": "ATTESTATION — Compliance Officer, Cubicle 14-C",
+      "description": "A 2.5D compliance game about sorting attestations against shifting corporate rules.",
+      "model": "GameGoCoder 3.8",
+      "status": "success",
+      "play": "./index.html",
+      "source": "./source.tar",
+      "preview": "./preview.png"
+    },
+    {
+      "rank": 5,
+      "id": "steam_38279__adaptive_v2_2_2",
+      "title": "Emptier of the Deck — Pixel Card Dungeon",
+      "description": "A pixel-art card dungeon where weapon values constrain the next attack.",
+      "model": "GameGoCoder 3.8",
+      "status": "success",
+      "play": "./index.html",
+      "source": "./source.tar",
+      "preview": "./preview.png"
+    },
+    {
+      "rank": 6,
+      "id": "steam_38312__adaptive_v2_2_2",
+      "title": "INKFALL — Wave Arena Action RPG",
+      "description": "A cel-shaded wave arena RPG spanning three dark, saturated realms.",
+      "model": "GameGoCoder 3.8",
+      "status": "success",
+      "play": "./index.html",
+      "source": "./source.tar",
+      "preview": "./preview.png"
+    },
+    {
+      "rank": 7,
+      "id": "steam_41340__adaptive_v2_2_2",
+      "title": "Wayforge: Frontier Reclamation",
+      "description": "A hand-painted 2.5D diorama game with bridges, stairs, and frontier reclamation.",
+      "model": "GameGoCoder 3.8",
+      "status": "success",
+      "play": "./index.html",
+      "source": "./source.tar",
+      "preview": "./preview.png"
+    },
+    {
+      "rank": 8,
+      "id": "steam_41885__adaptive_v2_2_2",
+      "title": "LANTERNFALL — Graveyard of the Nine",
+      "description": "A top-down pixel horror game where a lantern reveals the rainy graveyard and haunted houses.",
+      "model": "GameGoCoder 3.8",
+      "status": "success",
+      "play": "./index.html",
+      "source": "./source.tar",
+      "preview": "./preview.png"
+    },
+    {
+      "rank": 9,
+      "id": "steam_50060__adaptive_v2_2_2",
+      "title": "Twenty-Eight Days in Ashgrove",
+      "description": "A visual-novel life sim about spending daily slots while balancing energy, money, and relationships.",
+      "model": "GameGoCoder 3.8",
+      "status": "success",
+      "play": "./index.html",
+      "source": "./source.tar",
+      "preview": "./preview.png"
+    },
+    {
+      "rank": 10,
+      "id": "steam_50880__adaptive_v2_2_2",
+      "title": "Tonality Machine · Any Key → Consonant Note",
+      "description": "A browser music tool that maps keyboard keys to notes and chords in real time.",
+      "model": "GameGoCoder 3.8",
+      "status": "success",
+      "play": "./index.html",
+      "source": "./source.tar",
+      "preview": "./preview.png"
+    },
+    {
+      "rank": 11,
+      "id": "steam_51973__adaptive_v2_2_2",
+      "title": "Emberforge Depths — Match-3 Dungeon Battler",
+      "description": "A turn-based match-3 weapon-forging dungeon battler in a 3D isometric scene.",
+      "model": "GameGoCoder 3.8",
+      "status": "success",
+      "play": "./index.html",
+      "source": "./source.tar",
+      "preview": "./preview.png"
+    },
+    {
+      "rank": 12,
+      "id": "steam_52758__adaptive_v2_2_2",
+      "title": "SEEDLING // Seed-Generated Tile RPG",
+      "description": "A top-down tile RPG with seed-generated creatures, stats, moves, and encounters.",
+      "model": "GameGoCoder 3.8",
+      "status": "success",
+      "play": "./index.html",
+      "source": "./source.tar",
+      "preview": "./preview.png"
+    }
+  ]
+}
