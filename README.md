@@ -24,7 +24,7 @@
 
 ## Playable GameGoCoder 3.8 examples
 
-[Open the 12-game playable gallery](./games/) to try the successful games from the selected 13-task evaluation set. Each card includes the built browser game, a preview image, and the original artifact tar package.
+[Play online](https://haoyue-yang.github.io/GameGo/) · [Open the 12-game playable gallery in the repository](./games/) to try the successful games from the selected 13-task evaluation set. Each card includes the built browser game, a preview image, and the original artifact tar package.
 
 The gallery covers the appendix showcase tasks across 2D, 2.5D, and 3D settings. The failed selected-set entry is excluded.
 
