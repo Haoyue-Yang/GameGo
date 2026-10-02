@@ -35,14 +35,6 @@ GameGo studies **how to formulate and collect training tasks for agents that bui
 
 **Research question.** Short game requests often omit the rules and dependencies needed to produce a complete game. Full specifications resolve many ambiguities but can overload a coding agent. GameGo investigates a middle ground: construct a comprehensive internal specification, then deliver a compact query whose detail matches the task's complexity.
 
-## Resources
-
-| Resource | Description | Link |
-| --- | --- | --- |
-| GameGoCoder 3.8 | Qwen3.8-27B model trained on GameGoData | [Model weights](https://huggingface.co/Y36521478Y/GameGoCoder3_8) |
-| GameGoCoder 3.5 | Qwen3.5-27B model trained on GameGoData | [Model weights](https://huggingface.co/Y36521478Y/GameGoCoder3_5) |
-| GameGoBench | 124 held-out game-development queries | [Dataset](https://huggingface.co/datasets/Y36521478Y/GameGo) |
-| Playable showcase | Browser builds, previews, and source tar archives for 12 selected successful GameGoCoder 3.8 games | [Play online](https://haoyue-yang.github.io/GameGo/games/) · [Browse artifacts](./games/) |
 
 ## Method: expand, then project
 
