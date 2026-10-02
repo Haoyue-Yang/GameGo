@@ -1,8 +1,6 @@
 <div align="center">
 
-# GameGo
-
-### Training Game-Dev Agents with Synthetic Trajectories Anchored in Real-World Assets
+# GameGo: Training Game-Dev Agents with Synthetic Trajectories Anchored in Real-World Assets
 
 [![GameGoCoder 3.5](https://img.shields.io/badge/Hugging%20Face-GameGoCoder%203.5-yellow.svg)](https://huggingface.co/Y36521478Y/GameGoCoder3_5)
 [![GameGoCoder 3.8](https://img.shields.io/badge/Hugging%20Face-GameGoCoder%203.8-yellow.svg)](https://huggingface.co/Y36521478Y/GameGoCoder3_8)
@@ -16,13 +14,6 @@
   <a href="https://haoyue-yang.github.io/GameGo/"><strong>🎮 PLAY THE GAMES ONLINE →</strong></a>
 </p>
 
-## Models and benchmark
-
-| Resource | Hugging Face |
-| --- | --- |
-| **GameGoCoder 3.5** | [Model weights](https://huggingface.co/Y36521478Y/GameGoCoder3_5) |
-| **GameGoCoder 3.8** | [Model weights](https://huggingface.co/Y36521478Y/GameGoCoder3_8) |
-| **GameGoBench** | [124 held-out test queries](https://huggingface.co/datasets/Y36521478Y/GameGo) |
 
 ## Playable GameGoCoder 3.8 examples
 
