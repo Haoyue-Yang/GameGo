@@ -14,6 +14,10 @@
 
 </div>
 
+<p align="center">
+  <a href="https://haoyue-yang.github.io/GameGo/"><strong>🎮 PLAY THE GAMES ONLINE →</strong></a>
+</p>
+
 ## Models and benchmark
 
 | Resource | Hugging Face |
