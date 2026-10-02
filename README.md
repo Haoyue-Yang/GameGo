@@ -6,7 +6,16 @@
 
 **From real game concepts to executable development trajectories.**
 
-[**🎮 Play 12 games**](https://haoyue-yang.github.io/GameGo/) · [**GameGoCoder 3.8**](https://huggingface.co/Y36521478Y/GameGoCoder3_8) · [**GameGoCoder 3.5**](https://huggingface.co/Y36521478Y/GameGoCoder3_5) · [**GameGoBench**](https://huggingface.co/datasets/Y36521478Y/GameGo)
+<table>
+<tr>
+<td align="center" width="33%"><a href="https://huggingface.co/Y36521478Y/GameGoCoder3_5"><strong>GameGoCoder 3.5</strong></a><br><sub>Qwen3.5-27B fine-tuned model</sub><br><br><a href="https://huggingface.co/Y36521478Y/GameGoCoder3_5"><img src="https://img.shields.io/badge/%E2%86%93%20Download-GameGoCoder%203.5-ffcc66?style=for-the-badge" alt="Download GameGoCoder 3.5"></a></td>
+<td align="center" width="33%"><a href="https://huggingface.co/Y36521478Y/GameGoCoder3_8"><strong>GameGoCoder 3.8</strong></a><br><sub>Qwen3.8-27B fine-tuned model</sub><br><br><a href="https://huggingface.co/Y36521478Y/GameGoCoder3_8"><img src="https://img.shields.io/badge/%E2%86%93%20Download-GameGoCoder%203.8-7ba8ff?style=for-the-badge" alt="Download GameGoCoder 3.8"></a></td>
+<td align="center" width="33%"><a href="https://huggingface.co/datasets/Y36521478Y/GameGo"><strong>GameGoBench</strong></a><br><sub>124 held-out game-development tasks</sub><br><br><a href="https://huggingface.co/datasets/Y36521478Y/GameGo"><img src="https://img.shields.io/badge/%E2%86%93%20Download-GameGoBench%20124%20tasks-91efbd?style=for-the-badge" alt="Download GameGoBench"></a></td>
+</tr>
+</table>
+
+<h2 align="center"><a href="https://haoyue-yang.github.io/GameGo/">🎮 ▶ PLAY THE 12 GAMES ONLINE →</a></h2>
+<p align="center"><strong>Click here to launch the interactive GameGoCoder 3.8 showcase.</strong></p>
 
 <br>
 
