@@ -19,7 +19,7 @@
 
 <br>
 
-![GameGo task construction overview](./figure/game_case_v3.pdf)
+![GameGo task construction overview](./figure/game_case_v3.png)
 
 </div>
 
