@@ -82,7 +82,7 @@ On GameGoBench, both GameGoCoder models improve over their matched base models. 
 GameGoCoder 3.5 gains **17.85** Overall points over Qwen3.5-27B; GameGoCoder 3.8 gains **2.76** points over Qwen3.8-27B. In the task-representation study, task-adaptive queries achieve a median **3.79× relation-density gain** over full PRDs. Blinded human judgments report **85.7%** preference for games generated from these queries over games generated from full PRDs, and **86.6%** over games generated from direct queries.
 
 <p align="center">
- <img src="figure/pirewise_result_v2.png" alt="Blinded pairwise human preference" width="520">
+ <img src="figure/pairwise_result_v2.png" alt="Blinded pairwise human preference" width="520">
 </p>
 
 The figure below summarizes the task-adaptive query compression across difficulty levels. Compact queries use far fewer tokens than full PRDs while retaining a higher density of task-relevant relations; Human preferences for compact queries remain strong across all 3 difficulty levels.
