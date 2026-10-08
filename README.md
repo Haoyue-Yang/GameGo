@@ -19,7 +19,7 @@
 
 <br>
 
-![GameGo task construction overview](figure/T_soft_palette_overview_v2.png)
+![GameGo task construction overview](figure/game_case_v3.pdf)
 
 </div>
 
